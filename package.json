@@ -12,5 +12,9 @@
     "express": "^4.17.1",
     "spacetime": "^6.6.2",
     "spacetime-informal": "^0.3.0"
+  },
+  "repository": {
+    "type":"git",
+    "url":"https://github.com/TheJoeCoder/apiofeverything.git"
   }
 }
