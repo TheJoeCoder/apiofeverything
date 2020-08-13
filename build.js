@@ -13,7 +13,7 @@ fs.stat('./database.db', function (err, stats) {
   });
 });
 console.info("[INFO] Creating Database file...");
-let createdb = new sqlite3.Database('./database.db', sqlite3.OPEN_CREATE, (err) => {
+let createdb = new sqlite3.Database('./database.db', (err) => {
   if (err) {
     console.error(err.message);
   }
