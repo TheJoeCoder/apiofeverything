@@ -15,57 +15,6 @@ function reloadConfig() {
 //Define the port from the config.json file
 var serverport = config["port"] || 3000;
 
-//GetCSV from https://github.com/natn2323/parzival/blob/master/public/javascript/DBManager.js
-function getCSV(filelocation) {
-  return new Promise(function(resolve, reject) {
-    require('fs').readFile(filelocation, "utf8", function(err, data) {
-      if (err) {
-        reject(err);
-      } else {
-        let lines = data.split('\n'),
-            columns = [],
-            item = {},
-            items = [];
-
-        for(let i = 0; i < lines.length - 1; i++) {
-          // Skip the row of column headers
-          if(i === 0) continue;
-
-          let line = lines[i],
-              columns = line.split(',');
-
-          let postcode = columns[0],
-              status = columns[1],
-              usertype = columns[2],
-              easting = columns[3],
-              northing = columns[4],
-              positional_quality_indicator = columns[5],
-              country = columns[6],
-              latitude = columns[7],
-              longitude = columns[8],
-              postcode_no_space = columns[9],
-              postcode_fixed_width_seven = columns[10],
-              postcode_fixed_width_eight = columns[11],
-              postcode_area = columns[12],
-              postcode_district = columns[13],
-              postcode_sector = columns[14],
-              outcode = columns[15],
-              incode = columns[16];
-
-          menuItems.push({
-            "postcode": postcode,
-            "status": status,
-            "usertype": usertype
-          });
-
-        } // end for
-        resolve(menuItems);
-
-      } // end else
-    }); // end readFile
-  }); // return promise
-} // end getCSV
-
 //Current time in UTC
 app.get('/time/now', (req, res) => {
   var zone = "ETC/UTC";

@@ -2,7 +2,7 @@
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5DFKLGMU7QAMU&source=url)
 
-Warning: This is still in alpha so please do not use this.
+**Warning**: This is still in alpha so please do not use this unless you want to re-write your code a million times to support newer versions.
 
 APIOfEverything is a web API with a few things that could possibly be useful in some code.
 
@@ -24,7 +24,13 @@ cd apiofeverything
 npm install
 ```
 
-3. Launch the web server
+3. Build the Database
+
+```
+npm run build
+```
+
+4. Launch the web server
 
 ```
 npm start

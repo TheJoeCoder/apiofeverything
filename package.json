@@ -5,17 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node index.js"
+    "start": "node index.js",
+    "build": "node build.js"
   },
   "author": "TheJoeCoder",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
     "spacetime": "^6.6.2",
-    "spacetime-informal": "^0.3.0"
+    "spacetime-informal": "^0.3.0",
+    "sqlite3": "^5.0.0"
   },
   "repository": {
-    "type":"git",
-    "url":"https://github.com/TheJoeCoder/apiofeverything.git"
+    "type": "git",
+    "url": "https://github.com/TheJoeCoder/apiofeverything.git"
   }
 }
