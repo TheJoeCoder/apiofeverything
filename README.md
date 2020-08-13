@@ -1,5 +1,7 @@
 # API Of Everything
 
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5DFKLGMU7QAMU&source=url)
+
 Warning: This is still in alpha so please do not use this.
 
 APIOfEverything is a web API with a few things that could possibly be useful in some code.
