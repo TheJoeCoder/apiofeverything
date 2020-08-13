@@ -33,7 +33,7 @@ let db = new sqlite3.Database('./database.db', sqlite3.OPEN_READWRITE, (err) => 
   console.info("[INFO] Database connection succeeded.");
 });
 
-var sql = "CREATE TABLE ukpostcodes (id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY, postcode TEXT NOT NULL, status TEXT NOT NULL, usertype TEXT NOT NULL, easting INTEGER, northing INTEGER, positional_quality_indicator INTEGER NOT NULL, country TEXT NOT NULL, latitude NUMERIC NOT NULL, longitude NUMERIC NOT NULL, postcode_no_space TEXT NOT NULL, postcode_fixed_width_seven TEXT NOT NULL, postcode_fixed_width_eight TEXT NOT NULL, postcode_area TEXT NOT NULL, postcode_district TEXT NOT NULL, postcode_sector TEXT NOT NULL, outcode TEXT NOT NULL, incode TEXT NOT NULL);";
+var sql = "CREATE TABLE ukpostcodes (id INTEGER NOT NULL PRIMARY KEY, postcode TEXT NOT NULL, status TEXT NOT NULL, usertype TEXT NOT NULL, easting INTEGER, northing INTEGER, positional_quality_indicator INTEGER NOT NULL, country TEXT NOT NULL, latitude NUMERIC NOT NULL, longitude NUMERIC NOT NULL, postcode_no_space TEXT NOT NULL, postcode_fixed_width_seven TEXT NOT NULL, postcode_fixed_width_eight TEXT NOT NULL, postcode_area TEXT NOT NULL, postcode_district TEXT NOT NULL, postcode_sector TEXT NOT NULL, outcode TEXT NOT NULL, incode TEXT NOT NULL);";
 
 console.info("[INFO] Creating table for postcodes...");
 db.run(sql, ['C'], function(err) {
