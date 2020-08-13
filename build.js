@@ -95,8 +95,8 @@ fs.readFile("./postcodes_gb.csv", "utf8", function(err, data) {
 }); // end readFile
 
 console.info(`[INFO] Inserted ${lineslength} lines into the database.`);
-var hrend = process.hrtime(hrstart);
-console.info('[INFO] Execution time (hr): %ds %dms', hrend[0], hrend[1] / 1000000);
+var postcodesend = process.hrtime(postcodesstart);
+console.info('[INFO] Execution time (hr): %ds %dms', postcodesend[0], postcodesend[1] / 1000000);
 
 db.close((err) => {
   if (err) {
