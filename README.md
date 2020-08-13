@@ -1,5 +1,7 @@
 # API Of Everything
 
+Warning: This is still in alpha so please do not use this.
+
 APIOfEverything is a web API with a few things that could possibly be useful in some code.
 
 ## How to install
@@ -70,3 +72,9 @@ If you want to use this in your project, feel free to. Here's a guide.
   "errormessage": "IncorrectTimezone",
 }
 ```
+
+## Credit
+
+Timezone stuff: [Spacetime](https://github.com/spencermountain/spacetime)
+
+UK Postcode data: [GetTheData](https://www.getthedata.com/open-postcode-geo)
