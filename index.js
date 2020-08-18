@@ -1,9 +1,10 @@
 //Require
-const spacetime = require('spacetime');
-const informal = require('spacetime-informal');
 const express = require('express');
+const path = require('path');
 //Website
 const app = express();
+
+var packagejson = require('./package.json');
 
 //config
 var configpath = './config.json';
@@ -15,187 +16,51 @@ function reloadConfig() {
 //Define the port from the config.json file
 var serverport = config["port"] || 3000;
 
-//Current time in UTC
-app.get('/time/now', (req, res) => {
-  var zone = "ETC/UTC";
-  var time = informal.find(zone);
-  var reqbody = {};
-  if(time == null) {
-    reqbody = {
-      error: true,
-      errormessage: 'IncorrectTimezone'
-    };
-  } else {
-    var d = spacetime.now(time);
-    reqbody = {
-      error: false,
-      errormessage: null,
-      timezone: time,
-      datestring: d.unixFmt('yyyy-MM-dd'),
-      day: d.date(),
-      month: d.month(),
-      year: d.year(),
-      hour: d.hour(),
-      minute: d.minute(),
-      second: d.second(),
-      ampm: d.ampm(),
-      time24h: `${d.hour()}:${d.minute()}`,
-      time12h: d.time(),
-      dayname: d.dayName(),
-      dayofyear: d.dayOfYear(),
-      daytime: d.dayTime(),
-      monthname: d.monthName(),
-      quarter: d.quarter()
-    };
-  }
-  return res.send(reqbody);
+
+var enabledmodules = [];
+
+var normalizedPath = path.join(__dirname, "aoe_modules");
+require("fs").readdirSync(normalizedPath).forEach(function(file) {
+  var pl = require("./aoe_modules/" + file);
+  enabledmodules.push(pl.Info);
+  pl.Init(app);
 });
 
-//Current time in certain timezone
-app.get('/time/:timezone/now', (req, res) => {
-  var zone = req.params.timezone;
-  var time = informal.find(zone);
-  var reqbody = {};
-  if(time == null) {
-    reqbody = {
-      error: true,
-      errormessage: 'IncorrectTimezone'
-    };
-  } else {
-    var d = spacetime.now(time);
-    reqbody = {
-      error: false,
-      errormessage: null,
-      timezone: time,
-      datestring: d.unixFmt('yyyy-MM-dd'),
-      day: d.date(),
-      month: d.month(),
-      year: d.year(),
-      hour: d.hour(),
-      minute: d.minute(),
-      second: d.second(),
-      ampm: d.ampm(),
-      time24h: `${d.hour()}:${d.minute()}`,
-      time12h: d.time(),
-      dayname: d.dayName(),
-      dayofyear: d.dayOfYear(),
-      daytime: d.dayTime(),
-      monthname: d.monthName(),
-      quarter: d.quarter()
-    };
-  }
-  return res.send(reqbody);
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname + '/page-src/index.html'));
 });
 
-//Time tomorrow morning in UTC
-app.get('/time/tomorrow', (req, res) => {
-  var zone = "ETC/UTC";
-  var time = informal.find(zone);
-  var reqbody = {};
-  if(time == null) {
-    reqbody = {
-      error: true,
-      errormessage: 'IncorrectTimezone'
-    };
-  } else {
-    var d = spacetime.tomorrow(time);
-    reqbody = {
-      error: false,
-      errormessage: null,
-      timezone: time,
-      datestring: d.unixFmt('yyyy-MM-dd'),
-      day: d.date(),
-      month: d.month(),
-      year: d.year(),
-      hour: d.hour(),
-      minute: d.minute(),
-      second: d.second(),
-      ampm: d.ampm(),
-      time24h: `${d.hour()}:${d.minute()}`,
-      time12h: d.time(),
-      dayname: d.dayName(),
-      dayofyear: d.dayOfYear(),
-      daytime: d.dayTime(),
-      monthname: d.monthName(),
-      quarter: d.quarter()
-    };
-  }
-  return res.send(reqbody);
+app.get('/sys/modules', (req, res) => {
+  return res.send(enabledmodules);
 });
 
-//Time tomorrow morning in certain timezone
-app.get('/time/:timezone/tomorrow', (req, res) => {
-  var zone = req.params.timezone;
-  var time = informal.find(zone);
-  var reqbody = {};
-  if(time == null) {
-    reqbody = {
-      error: true,
-      errormessage: 'IncorrectTimezone'
-    };
-  } else {
-    var d = spacetime.tomorrow(time);
-    reqbody = {
-      error: false,
-      errormessage: null,
-      timezone: time,
-      datestring: d.unixFmt('yyyy-MM-dd'),
-      day: d.date(),
-      month: d.month(),
-      year: d.year(),
-      hour: d.hour(),
-      minute: d.minute(),
-      second: d.second(),
-      ampm: d.ampm(),
-      time24h: `${d.hour()}:${d.minute()}`,
-      time12h: d.time(),
-      dayname: d.dayName(),
-      dayofyear: d.dayOfYear(),
-      daytime: d.dayTime(),
-      monthname: d.monthName(),
-      quarter: d.quarter()
-    };
+app.get('/sys/modules/prettyprint', (req, res) => {
+  var names = "";
+  for (var i = 0; i < enabledmodules.length; i++) {
+    enabledmodules[i];
+    var strcomp = "",
+      tab = "&nbsp;&nbsp;&nbsp;&nbsp;",
+      name = enabledmodules[i]["name"],
+      version = enabledmodules[i]["version"],
+      desc = enabledmodules[i]["description"],
+      author = enabledmodules[i]["author"];
+    strcomp = "Module ID " + i + ": <br>" +
+      tab + "Name: " + name + "<br>" +
+      tab + "Version: " + version + "<br>" +
+      tab + "Author: " + author + "<br>" +
+      tab + "Description: " + desc + "<br>";
+    names = names + strcomp;
   }
-  return res.send(reqbody);
+  return res.send(names);
 });
 
-//Certain date in a certain timezone
-app.get('/time/:timezone/date/:year/:month/:day', (req, res) => {
-  var zone = req.params.timezone;
-  var year = req.params.year;
-  var month = req.params.month;
-  var date = req.params.day;
-  var time = informal.find(zone);
-  var reqbody = {};
-  if(time == null) {
-    reqbody = {
-      error: true,
-      errormessage: 'IncorrectTimezone'
-    };
-  } else {
-    var d = spacetime([year, month, date], time);
-    reqbody = {
-      error: false,
-      errormessage: null,
-      timezone: time,
-      datestring: d.unixFmt('yyyy-MM-dd'),
-      day: d.date(),
-      month: d.month(),
-      year: d.year(),
-      hour: d.hour(),
-      minute: d.minute(),
-      second: d.second(),
-      ampm: d.ampm(),
-      time24h: `${d.hour()}:${d.minute()}`,
-      time12h: d.time(),
-      dayname: d.dayName(),
-      dayofyear: d.dayOfYear(),
-      daytime: d.dayTime(),
-      monthname: d.monthName(),
-      quarter: d.quarter()
-    };
-  }
-  return res.send(reqbody);
+app.get('/sys/info', (req, res) => {
+  var bod = {
+    serverversion: packagejson["version"],
+    servername: config["server-name"],
+    serverowner: config["server-owner"]
+  };
+  return res.send(bod);
 });
 
 app.listen(serverport, () =>
