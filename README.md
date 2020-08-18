@@ -55,9 +55,9 @@ npm start
 
 There is a simple plugin manager which looks for js files in the `aoe_modules` directory.
 
-Here's how you use it.
+At the moment you can only use npm packages that are included with APIOfEverything or you could ask the users of your module to run a `npm install` command.
 
-At the moment you can only use npm packages that are included with APIOfEverything or you could ask the users of your module to run a `npm install` command
+Here's how you use it.
 
 ```javascript
 
