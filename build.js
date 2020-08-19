@@ -17,7 +17,7 @@ if (fs.existsSync('./database.db')) {
            var sql = 'CREATE TABLE ukpostcodes (id INTEGER NOT NULL PRIMARY KEY, postcode TEXT NOT NULL, status TEXT NOT NULL, usertype TEXT NOT NULL, easting INTEGER, northing INTEGER, positional_quality_indicator INTEGER NOT NULL, country TEXT NOT NULL, latitude NUMERIC NOT NULL, longitude NUMERIC NOT NULL, postcode_no_space TEXT NOT NULL, postcode_fixed_width_seven TEXT NOT NULL, postcode_fixed_width_eight TEXT NOT NULL, postcode_area TEXT NOT NULL, postcode_district TEXT NOT NULL, postcode_sector TEXT NOT NULL, outcode TEXT NOT NULL, incode TEXT NOT NULL);';
 
            console.info("[INFO] Creating table for postcodes...");
-           db.run(sql, ['C'], function(err) {
+           db.run(sql, function(err) {
              if (err) {
                console.error("[ERROR] Error while creating table!");
                return console.error("[ERROR] " + err.message);
@@ -29,14 +29,14 @@ if (fs.existsSync('./database.db')) {
              //partly borrowed from https://github.com/natn2323/parzival/blob/master/public/javascript/DBManager.js
              function addPostcodes() {
                return new Promise(function(resolve, reject) {
+                 let items = [];
                  fs.readFile("./postcodes_gb.csv", "utf8", function(err, data) {
                    if (err) {
                      console.error(err.message);
                    } else {
                      let lines = data.split('\n'),
                          columns = [],
-                         item = {},
-                         items = [];
+                         item = {};
                      var lineslength = lines.length - 1;
 
                      for(let i = 0; i < lines.length - 1; i++) {
@@ -64,6 +64,7 @@ if (fs.existsSync('./database.db')) {
                            outcode = columns[15],
                            incode = columns[16];
                          items.push({
+                           "id": i,
                            "postcode": postcode,
                            "status": status,
                            "usertype": usertype,
@@ -83,19 +84,17 @@ if (fs.existsSync('./database.db')) {
                            "incode": incode
                        });
                      }
-                     resolve(items);
                    }
                  });
+                 resolve(items);
                });
              }
-
-             var postcodesstart = process.hrtime();
-
-             addPostcodes().then(function(result) {
+             addPostcodes().then(function(result){
                for(let i = 0; i < result.length; i++) {
                    let unit = result[i];
-                   db.run("INSERT INTO ukpostcodes (postcode, status, usertype, easting, northing, positional_quality_indicator, country, latitude, longitude, postcode_no_space, postcode_fixed_width_seven, postcode_fixed_width_eight, postcode_area, postcode_district, postcode_sector, outcode, incode) VALUES ($postcode, $status, $usertype, $easting, $northing, $positional_quality_indicator, $country, $latitude, $longitude, $postcode_no_space, $postcode_fixed_width_seven, $postcode_fixed_width_eight, $postcode_area, $postcode_district, $postcode_sector, $outcode, $incode);",
+                   db.run("INSERT INTO ukpostcodes (id, postcode, status, usertype, easting, northing, positional_quality_indicator, country, latitude, longitude, postcode_no_space, postcode_fixed_width_seven, postcode_fixed_width_eight, postcode_area, postcode_district, postcode_sector, outcode, incode) VALUES ($id, $postcode, $status, $usertype, $easting, $northing, $positional_quality_indicator, $country, $latitude, $longitude, $postcode_no_space, $postcode_fixed_width_seven, $postcode_fixed_width_eight, $postcode_area, $postcode_district, $postcode_sector, $outcode, $incode);",
                    {
+                     $id: unit.i,
                      $postcode: unit.postcode,
                      $status: unit.status,
                      $usertype: unit.usertype,
@@ -114,9 +113,8 @@ if (fs.existsSync('./database.db')) {
                      $outcode: unit.outcode,
                      $incode: unit.incode
                    });
+                   console.log("inserted row " + i);
                  }
-                 db.close();
-                 console.info("[INFO] Done.");
              });
            });
          });

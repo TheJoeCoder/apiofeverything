@@ -1,6 +1,8 @@
 //Require
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
+
 //Website
 const app = express();
 
@@ -20,7 +22,7 @@ var serverport = config["port"] || 3000;
 var enabledmodules = [];
 
 var normalizedPath = path.join(__dirname, "aoe_modules");
-require("fs").readdirSync(normalizedPath).forEach(function(file) {
+fs.readdirSync(normalizedPath).forEach(function(file) {
   var pl = require("./aoe_modules/" + file);
   enabledmodules.push(pl.Info);
   pl.Init(app);
