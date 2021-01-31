@@ -2,21 +2,18 @@
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5DFKLGMU7QAMU&source=url)
 
-**Warning**: This is just a fun project. DON'T USE IT!!!!
+**Warning**: This is just a fun project, and it doesn't work well, if at all. DON'T USE IT!!!!
 
-APIOfEverything is a web API with a few things that could possibly be useful in some code.
+APIOfEverything is a web API with some random things.
 
 There is a simple modules system (which is still being worked on) to allow for easy expansion.
 
 ## How to install
 
-When I've set up a site with the API on you won't necessarily need to install this yourself but in the meantime:
-
 1. Clone the repository
 
 ```
 git clone https://github.com/TheJoeCoder/apiofeverything
-
 cd apiofeverything
 ```
 
@@ -39,13 +36,7 @@ npm install
 }
 ```
 
-4. Build the Database (currently broken, you can skip this step)
-
-```
-npm run build
-```
-
-5. Launch the web server
+4. Launch the web server
 
 ```
 npm start
@@ -55,7 +46,7 @@ npm start
 
 There is a simple plugin manager which looks for js files in the `aoe_modules` directory.
 
-At the moment you can only use npm packages that are included with APIOfEverything or you could ask the users of your module to run a `npm install` command.
+You can either only use the modules in nodejs or ask the users of your module to run a `npm install` command when first enabling it.
 
 Here's how you use it.
 
@@ -71,9 +62,9 @@ const plugininfo = {
   }
 };
 
-function plugininit(app) {
-  //Init function - Add all of your app.get() here
-  app.get('/api/someplugin/something/:someparam' (req, res) => {
+function plugininit(restapi) {
+  //Init function - Add all of your restapi.enable() here
+  restapi.enable(plugininfo, '/something/:someparam' (req, res) => { // /api/<pluginname>/something/:someparam
     return res.send(req.params.someparam);
   });
 }
@@ -89,7 +80,7 @@ If you want to use this in your project, feel free to. Here's a guide.
 
 1. Make a web request to the apiofeverything server.
 
-2. Check if the response is an error by seeing if the JSON output's error is false
+2. Check if the response is an error by seeing if the JSON output's error is false/true
 
 3. Do stuff with the other output.
 

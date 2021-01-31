@@ -6,7 +6,7 @@ const plugininfo = {
   "apicalls": {}
 };
 
-function plugininit(app) {
+function plugininit(restapi) {
   //Init function
 }
 

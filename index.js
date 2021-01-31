@@ -2,6 +2,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const { RestAPI } = require("./restapi");
 
 //Website
 const app = express();
@@ -22,10 +23,11 @@ var serverport = config["port"] || 3000;
 var enabledmodules = [];
 
 var normalizedPath = path.join(__dirname, "aoe_modules");
+var restapi = new RestAPI(app);
 fs.readdirSync(normalizedPath).forEach(function(file) {
   var pl = require("./aoe_modules/" + file);
   enabledmodules.push(pl.Info);
-  pl.Init(app);
+  pl.Init(restapi);
 });
 
 app.get('/', (req, res) => {

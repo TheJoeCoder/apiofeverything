@@ -49,9 +49,9 @@ const plugininfo = {
   }
 };
 
-function plugininit(app) {
+function plugininit(restapi) {
   //Current time in UTC
-  app.get('/api/time', (req, res) => {
+  restapi.enable(plugininfo, "/", (req, res) => {
     var zone = "ETC/UTC";
     var time = informal.find(zone);
     var reqbody = {};
@@ -63,7 +63,7 @@ function plugininit(app) {
     }
     return res.send(reqbody);
   });
-  app.get('/api/time/now', (req, res) => {
+  restapi.enable(plugininfo, "/now", (req, res) => {
     var zone = "ETC/UTC";
     var time = informal.find(zone);
     var reqbody = {};
@@ -77,7 +77,7 @@ function plugininit(app) {
   });
 
   //Current time in certain timezone
-  app.get('/api/time/:timezone', (req, res) => {
+  restapi.enable(plugininfo, "/:timezone", (req, res) => {
     var zone = req.params.timezone;
     var time = informal.find(zone);
     var reqbody = {};
@@ -89,7 +89,8 @@ function plugininit(app) {
     }
     return res.send(reqbody);
   });
-  app.get('/api/time/:timezone/now', (req, res) => {
+
+  restapi.enable(plugininfo, "/:timezone/now", (req, res) => {
     var zone = req.params.timezone;
     var time = informal.find(zone);
     var reqbody = {};
@@ -103,7 +104,7 @@ function plugininit(app) {
   });
 
   //Time tomorrow morning in UTC
-  app.get('/api/time/tomorrow', (req, res) => {
+  restapi.enable(plugininfo, '/tomorrow', (req, res) => {
     var zone = "ETC/UTC";
     var time = informal.find(zone);
     var reqbody = {};
@@ -117,7 +118,7 @@ function plugininit(app) {
   });
 
   //Time tomorrow morning in certain timezone
-  app.get('/api/time/:timezone/tomorrow', (req, res) => {
+  restapi.enable(plugininfo, '/:timezone/tomorrow', (req, res) => {
     var zone = req.params.timezone;
     var time = informal.find(zone);
     var reqbody = {};
@@ -131,7 +132,7 @@ function plugininit(app) {
   });
 
   //Certain date in UTC
-  app.get('/api/time/date/:year/:month/:day', (req, res) => {
+  restapi.enable(plugininfo, '/date/:year/:month/:day', (req, res) => {
     var zone = "ETC/UTC";
     var year = req.params.year;
     var month = req.params.month;
@@ -148,7 +149,7 @@ function plugininit(app) {
   });
 
   //Certain date in a certain timezone
-  app.get('/api/time/:timezone/date/:year/:month/:day', (req, res) => {
+  restapi.enable(plugininfo, '/:timezone/date/:year/:month/:day', (req, res) => {
     var zone = req.params.timezone;
     var year = req.params.year;
     var month = req.params.month;
